@@ -2,17 +2,19 @@
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-
+from django.contrib.auth import get_user_model
 from .models import Post
 from .serializers import PostSerializer
 
+
+User = get_user_model()
 
 @api_view(['GET'])
 def post_list(request):
     queryset=Post.objects.all().order_by('id')
     # print("queryset:", queryset)
     serializer=PostSerializer(queryset, many=True)
-    print("serializer:.data")
+    # print("serializer:.data")
     return Response(serializer.data, status=200)
 
 
@@ -40,3 +42,21 @@ def delete_post(request, id):
     # serializer=Post.objects.filter(id=id).delete()
     Post.delete()
     return Response(status=204)
+
+@api_view(['GET'])
+def filter_by_user(request, u_id):
+    # queryset=Post.objects.filter(author_id=u_id)
+    # author=get_object_or_404(User, id=u_id)
+    queryset=Post.objects.filter(author_id=u_id)
+    # print(queryset)
+    # return Response('ok')
+    serializer=PostSerializer(queryset, many=True)
+    return Response(serializer.data, status=200)
+
+@api_view(['GET'])
+def search(request):
+    q=request.query_params.get('q')
+    queryset=Post.objects.filter(body__icontains=q)#icontains-не чувствителен к регистру
+    serializer=PostSerializer(queryset, many=True)
+    return Response(serializer.data, status=200)
+    

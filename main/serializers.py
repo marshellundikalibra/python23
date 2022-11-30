@@ -12,5 +12,5 @@ class PostSerializer(ModelSerializer):
         
     #     return rep
 
-    def to_representation(self, instance:Post)
+    # def to_representation(self, instance:Post)
 

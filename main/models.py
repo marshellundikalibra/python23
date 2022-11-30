@@ -7,8 +7,12 @@ class Post(models.Model):
     body=models.TextField(null=True)
     created_at=models.DateTimeField(auto_now_add=True)
 
-class User(models.Model):
-    
+# class User(models.Model):
+    def __str__(self):
+        return f"{self.author.username} -> {self.body}"
+
+
+
 
 
 
